@@ -3,7 +3,7 @@
 const utils = require('./utils.js')
 
 // $(function(){})
-function isDirect(node, config) {
+function isDirect(node) {
   return (
     node.callee.type === 'Identifier' &&
     node.callee.name === '$' &&
@@ -42,7 +42,7 @@ module.exports = {
     const config = context.options[0] || {}
     return {
       CallExpression: function (node) {
-        if (isDirect(node, config) || isChained(node, config)) {
+        if (isDirect(node) || isChained(node, config)) {
           context.report({
             node: node,
             message: '$.ready is not allowed'

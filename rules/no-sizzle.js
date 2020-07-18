@@ -19,7 +19,7 @@ module.exports = {
   },
 
   create: function (context) {
-const config = context.options[0] || {};
+    const config = context.options[0] || {}
     const forbidden = /:animated|:button|:checkbox|:eq|:even|:file|:first([^-]|$)|:gt|:has|:header|:hidden|:image|:input|:last([^-]|$)|:lt|:odd|:parent|:password|:radio|:reset|:selected|:submit|:text|:visible/
     const traversals = [
       'children',

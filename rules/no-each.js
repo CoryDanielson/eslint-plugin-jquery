@@ -19,7 +19,7 @@ module.exports = {
   },
 
   create: function (context) {
-const config = context.options[0] || {};
+    const config = context.options[0] || {}
     return {
       CallExpression: function (node) {
         if (node.callee.type !== 'MemberExpression') return
