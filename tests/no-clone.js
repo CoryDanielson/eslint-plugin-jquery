@@ -28,7 +28,7 @@ ruleTester.run('no-clone', rule, {
       errors: [{message: error, type: 'CallExpression'}]
     },
     {
-      code: '$div.clone()',
+      code: 'this.$div.clone()',
       errors: [{message: error, type: 'CallExpression'}],
       options: [{validateThis: true}]
     },

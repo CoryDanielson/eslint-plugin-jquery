@@ -39,11 +39,6 @@ ruleTester.run('no-closest', rule, {
     {
       code: '$("div").append($("input").closest())',
       errors: [{message: error, type: 'CallExpression'}]
-    },
-    {
-      code: 'this.$div.append($("input").closest())',
-      errors: [{message: error, type: 'CallExpression'}],
-      options: [{validateThis: true}]
     }
   ]
 })
