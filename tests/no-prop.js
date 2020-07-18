@@ -7,7 +7,17 @@ const error = 'Prefer direct property access to $.prop'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-prop', rule, {
-  valid: ['prop()', '[].prop()', 'div.prop()', 'div.prop'],
+  valid: [
+    'prop()',
+    '[].prop()',
+    'div.prop()',
+    'div.prop',
+    {
+      code: 'this.$div.prop()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").prop()',
@@ -16,6 +26,11 @@ ruleTester.run('no-prop', rule, {
     {
       code: '$div.prop()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.prop()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().prop()',

@@ -7,7 +7,17 @@ const error = '$.hide is not allowed'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-hide', rule, {
-  valid: ['hide()', '[].hide()', 'div.hide()', 'div.hide'],
+  valid: [
+    'hide()',
+    '[].hide()',
+    'div.hide()',
+    'div.hide',
+    {
+      code: 'this.$div.hide()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").hide()',
@@ -16,6 +26,11 @@ ruleTester.run('no-hide', rule, {
     {
       code: '$div.hide()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.hide()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().hide()',

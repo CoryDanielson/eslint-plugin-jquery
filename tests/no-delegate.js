@@ -7,7 +7,17 @@ const error = 'Prefer addEventListener to $.delegate'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-delegate', rule, {
-  valid: ['delegate()', '[].delegate()', 'div.delegate()', 'div.delegate'],
+  valid: [
+    'delegate()',
+    '[].delegate()',
+    'div.delegate()',
+    'div.delegate',
+    {
+      code: 'this.$div.delegate()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").delegate()',
@@ -16,6 +26,11 @@ ruleTester.run('no-delegate', rule, {
     {
       code: '$div.delegate()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.delegate()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().delegate()',

@@ -17,7 +17,12 @@ ruleTester.run('no-serialize', rule, {
     'serializeArray()',
     '[].serializeArray()',
     'div.serializeArray()',
-    'div.serializeArray'
+    'div.serializeArray',
+    {
+      code: 'this.$div.serialize()',
+      errors: [{message: serializeError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -27,6 +32,11 @@ ruleTester.run('no-serialize', rule, {
     {
       code: '$div.serialize()',
       errors: [{message: serializeError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.serialize()',
+      errors: [{message: serializeError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().serialize()',

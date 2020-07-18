@@ -3,7 +3,17 @@
 module.exports = {
   meta: {
     docs: {},
-    schema: []
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          validateThis: {
+            default: false,
+            type: 'boolean'
+          }
+        }
+      }
+    ]
   },
 
   create: function (context) {

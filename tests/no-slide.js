@@ -23,7 +23,12 @@ ruleTester.run('no-slide', rule, {
     'slideUp()',
     '[].slideUp()',
     'div.slideUp()',
-    'div.slideUp'
+    'div.slideUp',
+    {
+      code: 'this.$div.slideToggle()',
+      errors: [{message: toggleError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -50,6 +55,11 @@ ruleTester.run('no-slide', rule, {
     {
       code: '$div.slideToggle()',
       errors: [{message: toggleError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.slideToggle()',
+      errors: [{message: toggleError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().slideToggle()',

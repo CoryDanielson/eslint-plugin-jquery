@@ -22,7 +22,12 @@ ruleTester.run('no-sizzle', rule, {
     '$(this).find($())',
     '$(this).find(function() {})',
     '$(this).find()',
-    '$(function() {})'
+    '$(function() {})',
+    {
+      code: 'this.$div.find("form input:checkbox")',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -212,6 +217,11 @@ ruleTester.run('no-sizzle', rule, {
     {
       code: '$div.find("form input:checkbox")',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.find("form input:checkbox")',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     }
   ]
 })

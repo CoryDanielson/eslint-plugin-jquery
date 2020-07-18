@@ -18,10 +18,21 @@ const Literal = 'Literal'
 module.exports = {
   meta: {
     docs: {},
-    schema: []
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          validateThis: {
+            default: false,
+            type: 'boolean'
+          }
+        }
+      }
+    ]
   },
 
   create: function (context) {
+    const config = context.options[0] || {}
     return {
       CallExpression: function (node) {
         if (
@@ -33,7 +44,7 @@ module.exports = {
           if (
             arg.type === Literal &&
             arg.value in disallowedEvents &&
-            utils.isjQuery(node)
+            utils.isjQuery(node, config)
           ) {
             context.report({
               node: node,

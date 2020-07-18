@@ -7,7 +7,17 @@ const error = 'Prefer fetch to $.load'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-load', rule, {
-  valid: ['load()', '[].load()', 'div.load()', 'div.load'],
+  valid: [
+    'load()',
+    '[].load()',
+    'div.load()',
+    'div.load',
+    {
+      code: 'this.$div.load()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").load()',
@@ -16,6 +26,11 @@ ruleTester.run('no-load', rule, {
     {
       code: '$div.load()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.load()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().load()',

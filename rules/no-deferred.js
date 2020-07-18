@@ -3,10 +3,22 @@
 module.exports = {
   meta: {
     docs: {},
-    schema: []
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          validateThis: {
+            default: false,
+            type: 'boolean'
+          }
+        }
+      }
+    ]
   },
 
   create: function (context) {
+    // eslint-disable-next-line no-unused-vars
+    const config = context.options[0] || {}
     function enforce(node) {
       if (node.callee.type !== 'MemberExpression') return
       if (node.callee.object.name !== '$') return

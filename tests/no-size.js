@@ -7,7 +7,17 @@ const error = 'Prefer length to $.size'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-size', rule, {
-  valid: ['size()', '[].size()', 'div.size()', 'div.size'],
+  valid: [
+    'size()',
+    '[].size()',
+    'div.size()',
+    'div.size',
+    {
+      code: 'this.$div.size()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").size()',
@@ -16,6 +26,11 @@ ruleTester.run('no-size', rule, {
     {
       code: '$div.size()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.size()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().size()',

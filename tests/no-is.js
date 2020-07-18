@@ -7,7 +7,17 @@ const error = 'Prefer matches to $.is'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-is', rule, {
-  valid: ['is()', '[].is()', 'div.is()', 'div.is'],
+  valid: [
+    'is()',
+    '[].is()',
+    'div.is()',
+    'div.is',
+    {
+      code: 'this.$div.is()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").is()',
@@ -16,6 +26,11 @@ ruleTester.run('no-is', rule, {
     {
       code: '$div.is()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.is()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().is()',

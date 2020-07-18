@@ -7,7 +7,17 @@ const error = 'Prefer value to $.val'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-val', rule, {
-  valid: ['val()', '[].val()', 'div.val()', 'div.val'],
+  valid: [
+    'val()',
+    '[].val()',
+    'div.val()',
+    'div.val',
+    {
+      code: 'this.$div.val()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").val()',
@@ -16,6 +26,11 @@ ruleTester.run('no-val', rule, {
     {
       code: '$div.val()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.val()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().val()',

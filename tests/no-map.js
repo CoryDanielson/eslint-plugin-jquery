@@ -7,7 +7,17 @@ const error = 'Prefer Array#map to $.map'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-map', rule, {
-  valid: ['map()', '[].map()', 'div.map()', 'div.map'],
+  valid: [
+    'map()',
+    '[].map()',
+    'div.map()',
+    'div.map',
+    {
+      code: 'this.$div.map()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$.map()',
@@ -20,6 +30,11 @@ ruleTester.run('no-map', rule, {
     {
       code: '$div.map()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.map()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().map()',

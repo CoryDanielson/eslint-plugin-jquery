@@ -7,7 +7,17 @@ const error = '$.has is not allowed'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-has', rule, {
-  valid: ['has()', '[].has()', 'div.has()', 'div.has'],
+  valid: [
+    'has()',
+    '[].has()',
+    'div.has()',
+    'div.has',
+    {
+      code: 'this.$div.has()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").has()',
@@ -16,6 +26,11 @@ ruleTester.run('no-has', rule, {
     {
       code: '$div.has()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.has()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().has()',

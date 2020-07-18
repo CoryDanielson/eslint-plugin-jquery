@@ -29,7 +29,12 @@ ruleTester.run('no-class', rule, {
     'toggleClass()',
     '[].toggleClass()',
     'div.toggleClass()',
-    'div.toggleClass'
+    'div.toggleClass',
+    {
+      code: 'this.$div.addClass()',
+      errors: [{message: toggleError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -37,8 +42,9 @@ ruleTester.run('no-class', rule, {
       errors: [{message: addError, type: 'CallExpression'}]
     },
     {
-      code: '$div.addClass()',
-      errors: [{message: addError, type: 'CallExpression'}]
+      code: 'this.$div.addClass()',
+      errors: [{message: addError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().addClass()',

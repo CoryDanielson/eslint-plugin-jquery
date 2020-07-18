@@ -7,7 +7,17 @@ const error = 'Prefer Array#filter to $.filter'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-filter', rule, {
-  valid: ['filter()', '[].filter()', 'div.filter()', 'div.filter'],
+  valid: [
+    'filter()',
+    '[].filter()',
+    'div.filter()',
+    'div.filter',
+    {
+      code: 'this.$div.filter()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").filter()',
@@ -16,6 +26,11 @@ ruleTester.run('no-filter', rule, {
     {
       code: '$div.filter()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.filter()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().filter()',

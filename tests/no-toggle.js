@@ -7,7 +7,17 @@ const error = '$.toggle is not allowed'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-toggle', rule, {
-  valid: ['toggle()', '[].toggle()', 'div.toggle()', 'div.toggle'],
+  valid: [
+    'toggle()',
+    '[].toggle()',
+    'div.toggle()',
+    'div.toggle',
+    {
+      code: 'this.$div.toggle()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").toggle()',
@@ -16,6 +26,11 @@ ruleTester.run('no-toggle', rule, {
     {
       code: '$div.toggle()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.toggle()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().toggle()',

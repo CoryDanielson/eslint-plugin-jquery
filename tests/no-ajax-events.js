@@ -10,7 +10,17 @@ ruleTester.run('no-ajax-events', rule, {
     '$form.on("submit", function(e){ })',
     '$form.on()',
     'on("ajaxSuccess", ".js-select-menu", function(e){ })',
-    'form.on("ajaxSend")'
+    'form.on("ajaxSend")',
+    {
+      code: 'this.$form.on("ajaxStop", function(e){ })',
+      errors: [
+        {
+          message: 'Prefer remoteForm to ajaxStop',
+          type: 'CallExpression'
+        }
+      ],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -66,6 +76,16 @@ ruleTester.run('no-ajax-events', rule, {
           type: 'CallExpression'
         }
       ]
+    },
+    {
+      code: 'this.$form.on("ajaxStop", function(e){ })',
+      errors: [
+        {
+          message: 'Prefer remoteForm to ajaxStop',
+          type: 'CallExpression'
+        }
+      ],
+      options: [{validateThis: true}]
     }
   ]
 })

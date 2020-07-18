@@ -7,7 +7,17 @@ const error = 'Prefer dispatchEvent + form.submit() to $.submit'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-submit', rule, {
-  valid: ['submit()', '[].submit()', 'form.submit()', 'form.submit'],
+  valid: [
+    'submit()',
+    '[].submit()',
+    'form.submit()',
+    'form.submit',
+    {
+      code: 'this.$form.submit()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("form").submit()',
@@ -16,6 +26,11 @@ ruleTester.run('no-submit', rule, {
     {
       code: '$form.submit()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$form.submit()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("form").first().submit()',

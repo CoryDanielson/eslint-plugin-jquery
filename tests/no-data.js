@@ -17,7 +17,12 @@ ruleTester.run('no-data', rule, {
     'removeData()',
     '[].removeData()',
     'div.removeData()',
-    'div.removeData'
+    'div.removeData',
+    {
+      code: 'this.$div.removeData()',
+      errors: [{message: removeError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -43,6 +48,11 @@ ruleTester.run('no-data', rule, {
     {
       code: '$div.removeData()',
       errors: [{message: removeError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.removeData()',
+      errors: [{message: removeError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     }
   ]
 })

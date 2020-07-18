@@ -29,7 +29,12 @@ ruleTester.run('no-fade', rule, {
     'fadeToggle()',
     '[].fadeToggle()',
     'div.fadeToggle()',
-    'div.fadeToggle'
+    'div.fadeToggle',
+    {
+      code: 'this.$div.fadeIn()',
+      errors: [{message: inError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -39,6 +44,11 @@ ruleTester.run('no-fade', rule, {
     {
       code: '$div.fadeIn()',
       errors: [{message: inError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.fadeIn()',
+      errors: [{message: inError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().fadeIn()',

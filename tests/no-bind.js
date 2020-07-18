@@ -7,7 +7,17 @@ const error = 'Prefer addEventListener to $.bind'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-bind', rule, {
-  valid: ['bind()', '[].bind()', 'div.bind()', 'div.bind'],
+  valid: [
+    'bind()',
+    '[].bind()',
+    'div.bind()',
+    'div.bind',
+    {
+      code: 'this.$div.bind()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").bind()',
@@ -16,6 +26,11 @@ ruleTester.run('no-bind', rule, {
     {
       code: '$div.bind()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.bind()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().bind()',

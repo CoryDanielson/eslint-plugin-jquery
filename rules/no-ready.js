@@ -3,7 +3,7 @@
 const utils = require('./utils.js')
 
 // $(function(){})
-function isDirect(node) {
+function isDirect(node, config) {
   return (
     node.callee.type === 'Identifier' &&
     node.callee.name === '$' &&
@@ -14,24 +14,35 @@ function isDirect(node) {
 }
 
 // $(document).ready()
-function isChained(node) {
+function isChained(node, config) {
   return (
     node.callee.type === 'MemberExpression' &&
     node.callee.property.name === 'ready' &&
-    utils.isjQuery(node)
+    utils.isjQuery(node, config)
   )
 }
 
 module.exports = {
   meta: {
     docs: {},
-    schema: []
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          validateThis: {
+            default: false,
+            type: 'boolean'
+          }
+        }
+      }
+    ]
   },
 
   create: function (context) {
+    const config = context.options[0] || {}
     return {
       CallExpression: function (node) {
-        if (isDirect(node) || isChained(node)) {
+        if (isDirect(node, config) || isChained(node, config)) {
           context.report({
             node: node,
             message: '$.ready is not allowed'

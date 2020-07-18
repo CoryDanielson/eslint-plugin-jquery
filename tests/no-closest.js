@@ -7,7 +7,17 @@ const error = 'Prefer closest to $.closest'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-closest', rule, {
-  valid: ['closest()', '[].closest()', 'div.closest()', 'div.closest'],
+  valid: [
+    'closest()',
+    '[].closest()',
+    'div.closest()',
+    'div.closest',
+    {
+      code: 'this.$div.closest()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").closest()',
@@ -18,12 +28,22 @@ ruleTester.run('no-closest', rule, {
       errors: [{message: error, type: 'CallExpression'}]
     },
     {
+      code: 'this.$div.closest()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
+    },
+    {
       code: '$("div").first().closest()',
       errors: [{message: error, type: 'CallExpression'}]
     },
     {
       code: '$("div").append($("input").closest())',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.append($("input").closest())',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     }
   ]
 })

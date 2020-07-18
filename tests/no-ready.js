@@ -16,7 +16,12 @@ ruleTester.run('no-ready', rule, {
     'div.ready',
     '$("div")',
     '$(document)',
-    '$()'
+    '$()',
+    {
+      code: 'this.$div.ready(function() { })',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -50,6 +55,11 @@ ruleTester.run('no-ready', rule, {
     {
       code: '$div.ready(function() { })',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.ready(function() { })',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("img").first().ready(function() { })',

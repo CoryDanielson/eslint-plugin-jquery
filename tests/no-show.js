@@ -7,7 +7,17 @@ const error = '$.show is not allowed'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-show', rule, {
-  valid: ['show()', '[].show()', 'div.show()', 'div.show'],
+  valid: [
+    'show()',
+    '[].show()',
+    'div.show()',
+    'div.show',
+    {
+      code: 'this.$div.show()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").show()',
@@ -16,6 +26,11 @@ ruleTester.run('no-show', rule, {
     {
       code: '$div.show()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.show()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().show()',

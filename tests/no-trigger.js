@@ -7,7 +7,17 @@ const error = 'Prefer dispatchEvent to $.trigger'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-trigger', rule, {
-  valid: ['trigger()', '[].trigger()', 'div.trigger()', 'div.trigger'],
+  valid: [
+    'trigger()',
+    '[].trigger()',
+    'div.trigger()',
+    'div.trigger',
+    {
+      code: 'this.$div.trigger()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").trigger()',
@@ -16,6 +26,11 @@ ruleTester.run('no-trigger', rule, {
     {
       code: '$div.trigger()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.trigger()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().trigger()',

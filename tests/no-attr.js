@@ -8,7 +8,17 @@ const setError = 'Prefer setAttribute to $.attr'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-attr', rule, {
-  valid: ['attr()', '[].attr()', 'div.attr()', 'div.attr'],
+  valid: [
+    'attr()',
+    '[].attr()',
+    'div.attr()',
+    'div.attr',
+    {
+      code: 'this.$el.attr("name", "random")',
+      errors: [{message: setError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").attr()',
@@ -33,6 +43,11 @@ ruleTester.run('no-attr', rule, {
     {
       code: '$("div").attr("name", "random")',
       errors: [{message: setError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$el.attr("name", "random")',
+      errors: [{message: setError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     }
   ]
 })

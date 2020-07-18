@@ -7,7 +7,17 @@ const error = 'Prefer cloneNode to $.clone'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-clone', rule, {
-  valid: ['clone()', '[].clone()', 'div.clone()', 'div.clone'],
+  valid: [
+    'clone()',
+    '[].clone()',
+    'div.clone()',
+    'div.clone',
+    {
+      code: 'this.$div.clone()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").clone()',
@@ -16,6 +26,11 @@ ruleTester.run('no-clone', rule, {
     {
       code: '$div.clone()',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: '$div.clone()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().clone()',

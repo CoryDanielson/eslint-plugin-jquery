@@ -7,7 +7,13 @@ const error = 'Prefer getComputedStyle to $.css'
 
 const ruleTester = new RuleTester()
 ruleTester.run('no-css', rule, {
-  valid: ['css()', '[].css()', 'div.css()', 'div.css'],
+  valid: [
+    {
+      code: 'this.$el.css()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
+  ],
   invalid: [
     {
       code: '$("div").css()',
@@ -24,6 +30,11 @@ ruleTester.run('no-css', rule, {
     {
       code: '$("div").append($("input").css())',
       errors: [{message: error, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$el.css()',
+      errors: [{message: error, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     }
   ]
 })

@@ -29,7 +29,12 @@ ruleTester.run('no-wrap', rule, {
     'unwrap()',
     '[].unwrap()',
     'div.unwrap()',
-    'div.unwrap'
+    'div.unwrap',
+    {
+      code: 'this.$div.wrap()',
+      errors: [{message: wrapError, type: 'CallExpression'}],
+      options: [{validateThis: false}]
+    }
   ],
   invalid: [
     {
@@ -39,6 +44,11 @@ ruleTester.run('no-wrap', rule, {
     {
       code: '$div.wrap()',
       errors: [{message: wrapError, type: 'CallExpression'}]
+    },
+    {
+      code: 'this.$div.wrap()',
+      errors: [{message: wrapError, type: 'CallExpression'}],
+      options: [{validateThis: true}]
     },
     {
       code: '$("div").first().wrap()',
